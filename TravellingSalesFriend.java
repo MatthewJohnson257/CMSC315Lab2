@@ -30,6 +30,7 @@ public class TravellingSalesFriend
 
 
             int[][] solutions = new int[numberOfCities][numberOfCities];
+            int[][] solutionTracking = new int[numberOfCities][numberOfCities];
 
             // first column
             for(int k = 0; k < numberOfCities; k++)
@@ -73,8 +74,10 @@ public class TravellingSalesFriend
                                 if((tempMin > solutions[i][k] + givenFlightCosts[k][i+1]) && i != k)
                                 {
                                     tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
+                                    // solutionTracking[i][j] = (i * 10) + k;
                                 }
                                 solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
+
 
                             }
                         }
@@ -86,14 +89,11 @@ public class TravellingSalesFriend
                                 if(tempMin > solutions[i][k] + givenFlightCosts[k][i+1])
                                 {
                                     tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
+                                    // solutionTracking[i][j] = (i * 10) + k;
                                 }
                                 solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
                             }
                         }
-                        // if(i == 4 && j == 5)
-                        // {
-                        //     System.out.println("tempMin: " + tempMin);
-                        // }
                     }
 
                     else if(i > j)
@@ -104,6 +104,8 @@ public class TravellingSalesFriend
                             if(tempMin > solutions[k][j] + givenFlightCosts[k][j+1])
                             {
                                 tempMin = solutions[k][j] + givenFlightCosts[k][j+1];
+                                // solutionTracking[i][j] = (k * 10) + j;
+
                             }
                             solutions[i][j] = tempMin + solutions[i][1] - solutions[j+1][1];
                         }
@@ -119,6 +121,27 @@ public class TravellingSalesFriend
 
             int finalMinimumCost = findCostOfSolution(solutions);
             System.out.println("finalMinimumCost: " + finalMinimumCost);
+
+
+
+            // needs FINISHED!!
+
+            // int i = 999;
+            // int j = 999;
+            // i = solutionTracking[20][23] / 10;
+            // j = solutionTracking[20][23] % 10;
+            // while(i != 0)
+            // {
+            //     sol
+            // }
+
+
+
+
+
+
+
+
         }
     }
 
