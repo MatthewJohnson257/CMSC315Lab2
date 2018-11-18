@@ -52,12 +52,13 @@ public class TravellingSalesFriend
                 solutions[k][1] = solutions[k-1][1] + givenFlightCosts[k-1][k];
             }
 
+            int tempMin = 99999;
 
             for(int i = 1; i < numberOfCities; i++)
             {
                 for(int j = 2; j < numberOfCities; j++)
                 {
-                    int tempMin = 99999;
+                    tempMin = 99999;
                     if(i == j)
                     {
                         solutions[i][j] = -1;
@@ -65,22 +66,59 @@ public class TravellingSalesFriend
 
                     else if (i < j)
                     {
-                        for(int k = 1; k < i; k++)
+                        if(i == 1)
                         {
-                            if(tempMin > solutions[i][k] + givenFlightCosts[k][i+1])
+                            for(int k = 0; k < i; k++)
                             {
-                                tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
+                                if((tempMin > solutions[i][k] + givenFlightCosts[k][i+1]) && i != k)
+                                {
+                                    tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
+                                }
+                                solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
+
                             }
-                            solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
+                        }
+
+                        else
+                        {
+                            for(int k = 1; k < i; k++)
+                            {
+                                if(tempMin > solutions[i][k] + givenFlightCosts[k][i+1])
+                                {
+                                    tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
+                                }
+                                solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
+                            }
+                        }
+                        // if(i == 4 && j == 5)
+                        // {
+                        //     System.out.println("tempMin: " + tempMin);
+                        // }
+                    }
+
+                    else if(i > j)
+                    {
+
+                        for(int k = 0; k < j; k++)
+                        {
+                            if(tempMin > solutions[k][j] + givenFlightCosts[k][j+1])
+                            {
+                                tempMin = solutions[k][j] + givenFlightCosts[k][j+1];
+                            }
+                            solutions[i][j] = tempMin + solutions[i][1] - solutions[j+1][1];
                         }
                     }
 
-
+                    //System.out.println("tempMin: " + tempMin);
                 }
             }
 
-
             printArray(solutions);
+
+
+
+            int finalMinimumCost = findCostOfSolution(solutions);
+            System.out.println("finalMinimumCost: " + finalMinimumCost);
         }
     }
 
@@ -111,6 +149,22 @@ public class TravellingSalesFriend
     }
 
 
+    public static int findCostOfSolution(int[][] array)
+    {
+        int minTotalCost = 9999;
+        for(int k = 0; k < array.length; k++)
+        {
+            if(minTotalCost > array[k][array.length-1] && array[k][array.length-1] != -1)
+            {
+                minTotalCost = array[k][array.length-1];
+            }
+            if(minTotalCost > array[array.length-1][k] && array[array.length-1][k] != -1)
+            {
+                minTotalCost = array[array.length-1][k];
+            }
+        }
+        return minTotalCost;
+    }
 
 
     public static void printArray(int[][] array)
@@ -119,7 +173,7 @@ public class TravellingSalesFriend
         {
             for(int j = 0; j < array[0].length; j++)
             {
-                System.out.print(array[i][j] + "\t");
+                System.out.print(array[i][j] + " ");
             }
             System.out.println();
         }
