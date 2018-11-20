@@ -2,9 +2,14 @@ import java.util.*;
 
 public class TravellingSalesFriend
 {
+    // used to track the solution and retrace through when printing who visited which cities
     static int index1 = Integer.MAX_VALUE;
     static int index2 = Integer.MAX_VALUE;
+
+
     static boolean debug = false; // set to true if you want debugging print statements
+
+
     public static void main(String[] args)
     {
         Scanner sc = new Scanner(System.in);
@@ -19,7 +24,10 @@ public class TravellingSalesFriend
 
         else
         {
+            // adjacency matrix of the flight costs
             int[][] givenFlightCosts = new int[numberOfCities][numberOfCities];
+
+            // place the input into a useable 2-d array called givenFlightCosts
             for(int i = 0; i < numberOfCities; i++)
             {
                 for(int j = 0; j < numberOfCities; j++)
@@ -28,6 +36,7 @@ public class TravellingSalesFriend
                 }
             }
 
+            // debug print statements
             if(debug)
             {
                 System.out.println("Number of Cities: " + numberOfCities);
@@ -37,16 +46,28 @@ public class TravellingSalesFriend
                 System.out.println();
             }
 
+            // will store the solutions to TSF(i, j)
             int[][] solutions = new int[numberOfCities][numberOfCities];
+
+            // used to track the i index of the solutions, which is used when
+            // retracing and printing out who visited which city
             int[][] trackingIndex1 = new int[numberOfCities][numberOfCities];
+
+            // used to track the j index of the solutions, which is used when
+            // retracing and printing out who visited which city
             int[][] trackingIndex2 = new int[numberOfCities][numberOfCities];
 
+            // used in the algorithm of TSF(i, j) to optimize values
+            // this is just a dummy value of sorts, which is why its value is MAX_VALUE
             int tempMin = Integer.MAX_VALUE;
 
+
+            // base cases
             solutions[0][0] = 0;
             solutions[0][1] = 0;
 
-            // first row
+            // first row of the solutions array
+            // this is a special case described in the explanantion in the PDF
             for(int k = 2; k < numberOfCities; k++)
             {
                 solutions[0][k] = solutions[0][k-1] + givenFlightCosts[k-1][k];
@@ -54,7 +75,8 @@ public class TravellingSalesFriend
                 trackingIndex2[0][k] = 0;
             }
 
-            // first column
+            // first column of the solutions array
+            // this is a special case described in the explanation in the PDF
             for(int k = 1; k < numberOfCities; k++)
             {
                 solutions[k][0] = solutions[k-1][0] + givenFlightCosts[k-1][k];
@@ -62,25 +84,32 @@ public class TravellingSalesFriend
                 trackingIndex2[k][0] = 0;
             }
 
+
+            // calculate TSF(i, j) used the algorithm and recursive relationship
+            // described in the explanation in the PDF
             for(int i = 1; i < numberOfCities; i++)
             {
                 for(int j = 1; j < numberOfCities; j++)
                 {
                     tempMin = Integer.MAX_VALUE;
 
+                    // special case described in the explanation in PDF
                     if(i == j)
                     {
                         solutions[i][j] = -1;
                     }
 
+                    // if my friend reaches a city farther along than me
                     else if(i < j)
                     {
+                        // handles error that would occur when I only reached city 1
                         if(i == 1)
                         {
                             solutions[i][j] = givenFlightCosts[0][1] + solutions[j][0] - solutions[2][0];
                             trackingIndex1[i][j] = 0;
                             trackingIndex2[i][j] = 2;
                         }
+
 
                         else
                         {
@@ -106,6 +135,7 @@ public class TravellingSalesFriend
                         }
                     }
 
+                    // if I reach a city farther along than my friend
                     else if(i > j)
                     {
                         for(int k = 0; k < j; k++)
@@ -134,7 +164,12 @@ public class TravellingSalesFriend
 
 
 
+
             int finalMinimumCost = findCostOfSolution(solutions);
+
+            // print the final minimum cost to visit all cities, optimized
+            System.out.println(finalMinimumCost);
+
 
             if(debug)
             {
@@ -225,14 +260,11 @@ public class TravellingSalesFriend
             Collections.sort(friendCitiesList);
 
 
-            if(myCitiesList.size() > 2 && myCitiesList.get(1) == 1)
+            if(myCitiesList.size() > 1 && myCitiesList.get(1) == 1)
             {
                 friendCitiesList.remove(one);
             }
 
-
-            // print the final minimum cost to visit all cities, optimized
-            System.out.println(finalMinimumCost);
 
             // print all the cities that I must visit personally
             for(int k = 0; k < myCitiesList.size(); k++)
@@ -254,7 +286,8 @@ public class TravellingSalesFriend
 
 
 
-
+    // accepts the number of cities as a parameter
+    // handles output if there are a very low number of cities ( < 3 )
     public static void handleEdgeCases(int numberOfCities)
     {
         if(numberOfCities <= 0)
@@ -278,17 +311,23 @@ public class TravellingSalesFriend
     }
 
 
+    // accepts the solution array as a parameter
+    // returns the value of the optimal cost to visit all cities
+    // considers all TSF(i,j) where either i or j equals the last city
     public static int findCostOfSolution(int[][] array)
     {
         int minTotalCost = Integer.MAX_VALUE;
         for(int k = 0; k < array.length; k++)
         {
+            // check all solutions where my friend reaches the last city
             if(minTotalCost > array[k][array.length-1] && array[k][array.length-1] != -1)
             {
                 minTotalCost = array[k][array.length-1];
                 index1 = k;
                 index2 = array.length - 1;
             }
+
+            // check all solutions where I reach the last city
             if(minTotalCost > array[array.length-1][k] && array[array.length-1][k] != -1)
             {
                 minTotalCost = array[array.length-1][k];
