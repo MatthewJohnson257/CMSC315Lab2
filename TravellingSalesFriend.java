@@ -1,3 +1,5 @@
+// Matthew Johnson
+
 import java.util.*;
 
 public class TravellingSalesFriend
@@ -110,7 +112,7 @@ public class TravellingSalesFriend
                             trackingIndex2[i][j] = 2;
                         }
 
-
+                        // normal treatment of the algorithm
                         else
                         {
 
@@ -125,6 +127,7 @@ public class TravellingSalesFriend
                                 solutions[i][j] = tempMin;
                             }
 
+                            // special case as described in the PDF
                             if((j == i + 1) && (tempMin > solutions[i][0]))
                             {
                                 tempMin = solutions[i][0];
@@ -149,6 +152,7 @@ public class TravellingSalesFriend
                             solutions[i][j] = tempMin;
                         }
 
+                        // special case as described in the PDF
                         if(tempMin > solutions[i][0] - givenFlightCosts[j-1][j] - givenFlightCosts[j][j+1] + givenFlightCosts[j-1][j+1])
                         {
                             tempMin = solutions[i][0] - givenFlightCosts[j-1][j] - givenFlightCosts[j][j+1] + givenFlightCosts[j-1][j+1];
@@ -164,7 +168,7 @@ public class TravellingSalesFriend
 
 
 
-
+            //
             int finalMinimumCost = findCostOfSolution(solutions);
 
             // print the final minimum cost to visit all cities, optimized
@@ -185,14 +189,18 @@ public class TravellingSalesFriend
                 System.out.println();
             }
 
-
+            // list of cities I visit
             ArrayList<Integer> myCitiesList = new ArrayList<Integer>();
+
+            // list of cities my friend visits
             ArrayList<Integer> friendCitiesList = new ArrayList<Integer>();
 
 
             myCitiesList.add(index1);
             friendCitiesList.add(index2);
 
+
+            // handles the backtracking of the solution, finding who visited which city
             if(index1 < index2)
             {
 
@@ -203,7 +211,6 @@ public class TravellingSalesFriend
 
             }
 
-
             else if(index1 > index2)
             {
                 for(int l = index2 + 1; l < index1; l++)
@@ -212,13 +219,11 @@ public class TravellingSalesFriend
                 }
             }
 
-
-
+            // (continues) handling the backtracking of the solution, finding who visited which city
             while(index1 != 0)
             {
                 int tempIndex1 = trackingIndex1[index1][index2];
                 int tempIndex2 = trackingIndex2[index1][index2];
-
 
                 if(tempIndex1 < tempIndex2)
                 {
@@ -229,7 +234,6 @@ public class TravellingSalesFriend
                     }
 
                 }
-
 
                 else if(tempIndex1 > tempIndex2)
                 {
@@ -245,21 +249,28 @@ public class TravellingSalesFriend
             }
 
 
+
+
             Integer zero = new Integer(0);
             Integer one = new Integer(1);
+
+            // handles error that occurred where '0' did not appear in myCitiesList
             if(!myCitiesList.contains(zero))
             {
                 myCitiesList.add(0);
             }
+
+            // handles error that occurred where '0' appeared in both lists
             if(friendCitiesList.contains(zero))
             {
                 friendCitiesList.remove(zero);
             }
 
+            // sort the two lists
             Collections.sort(myCitiesList);
             Collections.sort(friendCitiesList);
 
-
+            // handled error that occurred where '1' appeared in both lists
             if(myCitiesList.size() > 1 && myCitiesList.get(1) == 1)
             {
                 friendCitiesList.remove(one);
