@@ -2,13 +2,13 @@ import java.util.*;
 
 public class TravellingSalesFriend
 {
-    static int index1 = 999;
-    static int index2 = 999;
+    static int index1 = Integer.MAX_VALUE;
+    static int index2 = Integer.MAX_VALUE;
+    static boolean debug = false; // set to true if you want debugging print statements
     public static void main(String[] args)
     {
         Scanner sc = new Scanner(System.in);
         int numberOfCities = sc.nextInt();
-        System.out.println("numberOfCities: " + numberOfCities);
 
 
         // Handle edge cases involving a very small number of cities
@@ -28,133 +28,18 @@ public class TravellingSalesFriend
                 }
             }
 
-            printArray(givenFlightCosts);
-            System.out.println();
-
+            if(debug)
+            {
+                System.out.println("Number of Cities: " + numberOfCities);
+                System.out.println();
+                System.out.println("Given Flights Costs:");
+                printArray(givenFlightCosts);
+                System.out.println();
+            }
 
             int[][] solutions = new int[numberOfCities][numberOfCities];
             int[][] trackingIndex1 = new int[numberOfCities][numberOfCities];
             int[][] trackingIndex2 = new int[numberOfCities][numberOfCities];
-
-            // // first column
-            // for(int k = 0; k < numberOfCities; k++)
-            // {
-            //     solutions[k][0] = -1;
-            // }
-            //
-            // // first row
-            // solutions[0][1] = 0;
-            // for(int k = 2; k < numberOfCities; k++)
-            // {
-            //     solutions[0][k] = solutions[0][k-1] + givenFlightCosts[k-1][k];
-            // }
-            //
-            //
-            //
-            // for(int k = 2; k < numberOfCities - 1; k++)
-            // {
-            //     solutions[k][k+1] = solutions[0][1] + solutions[0][k] - givenFlightCosts[k-1][k] + givenFlightCosts[0][1];
-            // }
-            //
-            // // second column
-            // solutions[1][1] = -1;
-            // solutions[2][1] = givenFlightCosts[0][2];
-            // solutions[1][2] = givenFlightCosts[0][1];
-            // for(int k = 3; k < numberOfCities; k++)
-            // {
-            //     solutions[k][1] = solutions[k-1][1] + givenFlightCosts[k-1][k];
-            // }
-            //
-            // // for(int k = 2; k < numberOfCities; k++)
-            // // {
-            // //     solutions[k-1][k] = givenFlightCosts[0][1] + solutions[0][k] - givenFlightCosts[k-1][k];
-            // // }
-            //
-            // // for(int k = 1; k < numberOfCities; k++)
-            // // {
-            // //     solutions[k-1][k] =
-            // // }
-            // int tempMin = maximumCostFromOneCityToAnother * maximumCostFromOneCityToAnother;
-            //
-            // for(int i = 1; i < numberOfCities; i++)
-            // {
-            //     for(int j = 1; j < numberOfCities; j++)
-            //     {
-            //         tempMin = maximumCostFromOneCityToAnother * maximumCostFromOneCityToAnother;
-            //         if(i == j)
-            //         {
-            //             solutions[i][j] = -1;
-            //         }
-            //
-            //         else if (i < j && solutions[i][j] < 1)
-            //         {
-            //             if(i == 1)
-            //             {
-            //                 for(int k = 0; k < i; k++)
-            //                 {
-            //                     if((tempMin > solutions[1][k] + givenFlightCosts[i+1][k]) && i != k  && !(i == numberOfCities))
-            //                     {
-            //                         tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
-            //                         trackingIndex1[i][j] = i;
-            //                         trackingIndex2[i][j] = k;
-            //                     }
-            //                     solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
-            //
-            //
-            //                 }
-            //             }
-            //
-            //             else
-            //             {
-            //                 for(int k = 1; k < i; k++)
-            //                 {
-            //                     if(tempMin > solutions[i][k] + givenFlightCosts[k][i+1])
-            //                     {
-            //                         tempMin = solutions[i][k] + givenFlightCosts[k][i+1];
-            //                         trackingIndex1[i][j] = i;
-            //                         trackingIndex2[i][j] = k;
-            //                     }
-            //                     solutions[i][j] = tempMin + solutions[0][j] - solutions[0][i+1];
-            //                 }
-            //             }
-            //         }
-            //
-            //         else if(i > j && solutions[i][j] < 1)
-            //         {
-            //             if(j == 1)
-            //             {
-            //                 for(int k = 0; k < j; k++)
-            //                 {
-            //                     if((tempMin > solutions[k][j] + givenFlightCosts[k][j+1]))
-            //                     {
-            //                         tempMin = solutions[k][j] + givenFlightCosts[k][j+1];
-            //                         trackingIndex1[i][j] = k;
-            //                         trackingIndex2[i][j] = j;
-            //                     }
-            //                     solutions[i][j] = tempMin + solutions[i][1] - solutions[j+1][1];
-            //
-            //
-            //                 }
-            //             }
-            //
-            //             else
-            //             {
-            //
-            //             for(int k = 0; k < j; k++)
-            //             {
-            //                 if(tempMin > solutions[k][j] + givenFlightCosts[k][j+1])
-            //                 {
-            //                     tempMin = solutions[k][j] + givenFlightCosts[k][j+1];
-            //                     trackingIndex1[i][j] = k;
-            //                     trackingIndex2[i][j] = j;
-            //                 }
-            //                 solutions[i][j] = tempMin + solutions[i][1] - solutions[j+1][1];
-            //             }
-            //             }
-            //         }
-            //         //System.out.println("tempMin: " + tempMin);
-            //     }
-            // }
 
             int tempMin = Integer.MAX_VALUE;
 
@@ -249,29 +134,27 @@ public class TravellingSalesFriend
 
 
 
-
-
-            printArray(solutions);
-
-
-
-
             int finalMinimumCost = findCostOfSolution(solutions);
-            System.out.println("finalMinimumCost: " + finalMinimumCost);
 
-            System.out.println();
-            //printArray(solutionTracking);
-            printArray(trackingIndex1);
-            System.out.println();
-            printArray(trackingIndex2);
-
+            if(debug)
+            {
+                System.out.println();
+                System.out.println("Solutions Array:");
+                printArray(solutions);
+                System.out.println();
+                System.out.println("Tracking Index 1 Array:");
+                printArray(trackingIndex1);
+                System.out.println();
+                System.out.println("Tracking Index 2 Array:");
+                printArray(trackingIndex2);
+                System.out.println();
+            }
 
 
             ArrayList<Integer> myCitiesList = new ArrayList<Integer>();
             ArrayList<Integer> friendCitiesList = new ArrayList<Integer>();
 
 
-            //myCitiesList.add(0);
             myCitiesList.add(index1);
             friendCitiesList.add(index2);
 
@@ -280,7 +163,6 @@ public class TravellingSalesFriend
 
                 for(int l = index1 + 1; l < index2; l++)
                 {
-                    System.out.println("First: " + l);
                     friendCitiesList.add(l);
                 }
 
@@ -291,7 +173,6 @@ public class TravellingSalesFriend
             {
                 for(int l = index2 + 1; l < index1; l++)
                 {
-                    System.out.println("Second: " + l);
                     myCitiesList.add(l);
                 }
             }
@@ -302,15 +183,13 @@ public class TravellingSalesFriend
             {
                 int tempIndex1 = trackingIndex1[index1][index2];
                 int tempIndex2 = trackingIndex2[index1][index2];
-                // myCitiesList.add(index1);
-                // friendCitiesList.add(index2);
+
 
                 if(tempIndex1 < tempIndex2)
                 {
                     myCitiesList.add(tempIndex1);
                     for(int l = tempIndex1 + 1; l < tempIndex2; l++)
                     {
-                        //System.out.println("First: " + l);
                         friendCitiesList.add(l);
                     }
 
@@ -322,7 +201,6 @@ public class TravellingSalesFriend
                     friendCitiesList.add(tempIndex2);
                     for(int l = tempIndex2 + 1; l < tempIndex1; l++)
                     {
-                        //System.out.println("Second: " + l);
                         myCitiesList.add(l);
                     }
                 }
@@ -353,10 +231,21 @@ public class TravellingSalesFriend
             }
 
 
-            System.out.println("MyCities: " + myCitiesList.toString());
-            System.out.println("FriendsCities: " + friendCitiesList.toString());
+            // print the final minimum cost to visit all cities, optimized
+            System.out.println(finalMinimumCost);
 
+            // print all the cities that I must visit personally
+            for(int k = 0; k < myCitiesList.size(); k++)
+            {
+                System.out.print(myCitiesList.get(k) + " ");
+            }
+            System.out.println();
 
+            // print all the cities that my friend must visit
+            for(int k = 0; k < friendCitiesList.size(); k++)
+            {
+                System.out.print(friendCitiesList.get(k) + " ");
+            }
 
 
         }
@@ -391,7 +280,7 @@ public class TravellingSalesFriend
 
     public static int findCostOfSolution(int[][] array)
     {
-        int minTotalCost = 9999;
+        int minTotalCost = Integer.MAX_VALUE;
         for(int k = 0; k < array.length; k++)
         {
             if(minTotalCost > array[k][array.length-1] && array[k][array.length-1] != -1)
@@ -407,12 +296,11 @@ public class TravellingSalesFriend
                 index2 = k;
             }
         }
-        System.out.println("index1: " + index1);
-        System.out.println("index2: " + index2);
         return minTotalCost;
     }
 
 
+    // method purely for debugging; will print out the contents of a 2-d array
     public static void printArray(int[][] array)
     {
         for(int i = 0; i < array.length; i++)
