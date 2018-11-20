@@ -165,12 +165,16 @@ public class TravellingSalesFriend
             for(int k = 2; k < numberOfCities; k++)
             {
                 solutions[0][k] = solutions[0][k-1] + givenFlightCosts[k-1][k];
+                trackingIndex1[0][k] = 0;
+                trackingIndex2[0][k] = 0;
             }
 
             // first column
             for(int k = 1; k < numberOfCities; k++)
             {
                 solutions[k][0] = solutions[k-1][0] + givenFlightCosts[k-1][k];
+                trackingIndex1[k][0] = 0;
+                trackingIndex2[k][0] = 0;
             }
 
             for(int i = 1; i < numberOfCities; i++)
@@ -211,10 +215,9 @@ public class TravellingSalesFriend
                             {
                                 tempMin = solutions[i][0];
                                 solutions[i][j] = tempMin;
-                                trackingIndex1[i][j] = i;
-                                trackingIndex2[i][j] = j;
+                                trackingIndex1[i][j] = j - 1;
+                                trackingIndex2[i][j] = 0;
                             }
-                            //solutions[i][j] = tempMin + (solutions[0][j] - solutions[0][i+1]);
                         }
                     }
 
@@ -225,8 +228,8 @@ public class TravellingSalesFriend
                             if(tempMin > solutions[k][j] + givenFlightCosts[k][j+1] + (solutions[i][0] - solutions[j+1][0]))
                             {
                                 tempMin = solutions[k][j] + givenFlightCosts[k][j+1] + (solutions[i][0] - solutions[j+1][0]);
-                                trackingIndex1[i][j] = i;
-                                trackingIndex2[i][j] = k;
+                                trackingIndex1[i][j] = k;
+                                trackingIndex2[i][j] = j;
                             }
                             solutions[i][j] = tempMin;
                         }
@@ -238,7 +241,6 @@ public class TravellingSalesFriend
                             trackingIndex1[i][j] = i;
                             trackingIndex2[i][j] = j;
                         }
-                        //solutions[i][j] = tempMin + (solutions[i][0] - solutions[j+1][0]);
                     }
 
                 }
@@ -269,7 +271,7 @@ public class TravellingSalesFriend
             ArrayList<Integer> friendCitiesList = new ArrayList<Integer>();
 
 
-            myCitiesList.add(0);
+            //myCitiesList.add(0);
             myCitiesList.add(index1);
             friendCitiesList.add(index2);
 
@@ -330,17 +332,26 @@ public class TravellingSalesFriend
             }
 
 
-
-
-            // 222
-            // 0 4 7 9 12 17 20
-            // 56
-            // 1 2 3 5 6 8 10 11 13 14 15 16 18 19 21 22 23
-            // 166
-
+            Integer zero = new Integer(0);
+            Integer one = new Integer(1);
+            if(!myCitiesList.contains(zero))
+            {
+                myCitiesList.add(0);
+            }
+            if(friendCitiesList.contains(zero))
+            {
+                friendCitiesList.remove(zero);
+            }
 
             Collections.sort(myCitiesList);
             Collections.sort(friendCitiesList);
+
+
+            if(myCitiesList.size() > 2 && myCitiesList.get(1) == 1)
+            {
+                friendCitiesList.remove(one);
+            }
+
 
             System.out.println("MyCities: " + myCitiesList.toString());
             System.out.println("FriendsCities: " + friendCitiesList.toString());
